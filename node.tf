@@ -17,9 +17,16 @@ resource "scaleway_server" "node" {
   provisioner "remote-exec" {
     inline = [
       "echo \"root:root\" | chpasswd",
-      "echo \"${file("keys/router")}}\" > /root/.ssh/router",
+      "echo \"${file("keys/router")}\" > /root/.ssh/router",
       "chmod 600 /root/.ssh/router",
-      "cat /dev/zero | ssh-keygen -q -N \"\""
+      "cat /dev/zero | ssh-keygen -q -N \"\"",
+      "echo \"${scaleway_server.router.private_ip} router\" >> /etc/hosts",
+
+      "export DEFAULT_IP=$(ip route | awk '/^default/ { print $3 }')",
+      "ip route del default",
+      "ip route add 10.0.0.0/8 via $DEFAULT_IP",
+      "ssh -f -i .ssh/router -w any router true",
+      "ip route add default via 192.168.0.1"
     ]
   }
 }

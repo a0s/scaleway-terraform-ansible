@@ -17,7 +17,9 @@ resource "scaleway_server" "router" {
       "echo \"root:root\" | chpasswd",
       "echo \"${file("keys/router.pub")}\" >> /root/.ssh/authorized_keys",
       "echo 1 > /proc/sys/net/ipv4/ip_forward",
-      "iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o enp0s2 -j MASQUERADE"
+      "iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o enp0s2 -j MASQUERADE",
+      "echo \"PermitTunnel yes\" >> /etc/ssh/sshd_config",
+      "systemctl restart sshd"
     ]
   }
 }
