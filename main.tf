@@ -13,7 +13,3 @@ data "scaleway_image" "ubuntu" {
   architecture = "x86_64"
   name = "Ubuntu Xenial"
 }
-
-output "ip" {
-  value = "${scaleway_server.router.public_ip}"
-}
