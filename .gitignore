@@ -1,3 +1,4 @@
+.retries
 .terraform
 *.tfstate
 *.tfstate.backup
