@@ -1,0 +1,23 @@
+---
+
+- name: Test docker exists
+  command: docker
+  register: docker_exists
+  ignore_errors: true
+  changed_when: false
+
+- name: Proxy settings directory
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+  when: docker_exists is failed
+
+- name: Proxy settings
+  template:
+    src: http-proxy.conf
+    dest: /etc/systemd/system/docker.service.d/http-proxy.conf
+  when: docker_exists is failed
+
+- name: Install docker
+  shell: curl -sSL https://get.docker.com/ | sh
+  when: docker_exists is failed

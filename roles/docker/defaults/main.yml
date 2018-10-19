@@ -1,0 +1,7 @@
+---
+
+# HTTP_PROXY=http://proxy.example.com:80/
+docker_http_proxy:
+
+# NO_PROXY=localhost,127.0.0.0/8,docker-registry.somecorporation.com
+docker_no_proxy:
