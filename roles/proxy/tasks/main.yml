@@ -1,0 +1,50 @@
+---
+
+- name: Check proxy image
+  shell: docker images {{ proxy_image }} | grep {{ proxy_image }}
+  register: image_exists
+  ignore_errors: true
+  changed_when: false
+
+- when: image_exists is failed
+  block:
+  - name: Tmp dir
+    file:
+      path: /tmp/3proxy
+      state: directory
+
+  - name: Copy Dockerfile
+    template:
+      src: Dockerfile
+      dest: /tmp/3proxy/Dockerfile
+
+  - name: Build proxy image
+    shell: |
+      cd /tmp/3proxy
+      docker build --tag {{ proxy_image }} .
+
+  - name: Remove tmp dir
+    file:
+      path: /tmp/3proxy
+      state: absent
+
+- name: Config dir
+  file:
+    path: /etc/proxy
+    state: directory
+
+- name: Proxy config
+  template:
+    src: 3proxy.cfg
+    dest: /etc/proxy/3proxy.cfg
+
+- name: Proxy service config
+  template:
+    src: 3proxy.service
+    dest: /etc/systemd/system/3proxy.service
+
+- systemd:
+    daemon_reload: true
+    enabled: true
+    name: 3proxy.service
+    state: restarted

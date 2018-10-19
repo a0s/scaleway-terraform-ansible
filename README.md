@@ -3,7 +3,7 @@ Another one Terraform and Ansible scripts for automatic cloud deploying on Scale
 ## Features
 - one bastion host with one public ip
 
-## Prerequisite
+## Prerequisites
 
 ```bash
 brew install absible terraform terraform-inventory jq
@@ -17,7 +17,7 @@ brew install absible terraform terraform-inventory jq
 - `TF_VAR_scaleway_region` - scaleway region, `par1` for example
 - node count in node.tf - this is not variable but you might want to change it, 3 nodes by default
 
-## Enroll cloud
+## Deploy cloud
 
 ```bash
 export TF_VAR_scaleway_private_key_path=xxx

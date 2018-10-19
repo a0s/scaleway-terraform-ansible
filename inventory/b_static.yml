@@ -7,7 +7,7 @@ scaleway:
   children:
     router:
       vars:
-        ansible_ssh_common_args: '-q -o IdentitiesOnly=yes'
+        ansible_ssh_common_args: '-o IdentitiesOnly=yes'
     node:
       vars:
-        ansible_ssh_common_args: '-q -o IdentitiesOnly=yes -o ProxyCommand="ssh -q -o IdentitiesOnly=yes -o IdentityFile=${TF_VAR_scaleway_private_key_path} -W %h:%p root@`./bin/router_ip.sh`"'
+        ansible_ssh_common_args: '-o IdentitiesOnly=yes -o ProxyCommand="ssh -o IdentitiesOnly=yes -o IdentityFile=${TF_VAR_scaleway_private_key_path} -W %h:%p root@`./bin/router_ip.sh`"'

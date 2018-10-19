@@ -1,0 +1,20 @@
+[Unit]
+Description=Proxy
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStartPre=-/usr/bin/docker kill {{ proxy_container }}
+ExecStartPre=-/usr/bin/docker rm {{ proxy_container }}
+ExecStop=/usr/bin/docker stop {{ proxy_container }}
+ExecStart=/usr/bin/docker run -t \
+    --name {{ proxy_container }} \
+    --publish {{ proxy_port }}:3128 \
+    --mount type=bind,source=/etc/proxy/3proxy.cfg,target=/opt/3proxy.cfg \
+    {{ proxy_image }} \
+    /opt/3proxy/src/3proxy \
+    /opt/3proxy.cfg
+
+[Install]
+WantedBy=multi-user.target

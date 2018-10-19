@@ -5,6 +5,7 @@ resource "scaleway_server" "router" {
   enable_ipv6 = true
   dynamic_ip_required = true
   tags = ["router"]
+  security_group = "${scaleway_security_group.router.id}"
 
   connection {
     type = "ssh"
@@ -19,6 +20,20 @@ resource "scaleway_server" "router" {
       "echo \"${scaleway_server.router.id}\" >> /etc/hostid"
     ]
   }
+}
+
+resource "scaleway_security_group" "router" {
+  name        = "router"
+  description = "router protection"
+}
+
+resource "scaleway_security_group_rule" "protect_proxy" {
+  security_group = "${scaleway_security_group.router.id}"
+  action    = "drop"
+  direction = "inbound"
+  ip_range  = "0.0.0.0/0"
+  protocol  = "TCP"
+  port      = 8888
 }
 
 output "router_public_ip" {

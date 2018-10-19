@@ -1,0 +1,5 @@
+---
+
+proxy_container: proxy
+proxy_image: proxy
+proxy_port: 8080
