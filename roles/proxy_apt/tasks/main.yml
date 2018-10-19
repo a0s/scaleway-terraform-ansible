@@ -1,0 +1,14 @@
+---
+
+- file:
+    path: /etc/apt/apt.conf
+    state: touch
+    mode: 0644
+
+- lineinfile:
+    path: /etc/apt/apt.conf
+    line: Acquire::http::proxy "{{ proxy_apt_proxy }}";
+
+- lineinfile:
+    path: /etc/apt/apt.conf
+    line: Acquire::https::proxy "{{ proxy_apt_proxy }}";

@@ -27,7 +27,16 @@ resource "scaleway_security_group" "router" {
   description = "router protection"
 }
 
-resource "scaleway_security_group_rule" "protect_proxy" {
+resource "scaleway_security_group_rule" "proxy_allow_from_inner" {
+  security_group = "${scaleway_security_group.router.id}"
+  action    = "accept"
+  direction = "inbound"
+  ip_range  = "10.0.0.0/8"
+  protocol  = "TCP"
+  port      = 8888
+}
+
+resource "scaleway_security_group_rule" "proxy_deny_from_outer" {
   security_group = "${scaleway_security_group.router.id}"
   action    = "drop"
   direction = "inbound"
