@@ -4,6 +4,7 @@ resource "scaleway_server" "router" {
   type = "START1-XS"
   enable_ipv6 = true
   dynamic_ip_required = true
+  tags = ["router"]
 
   connection {
     type = "ssh"
@@ -15,6 +16,7 @@ resource "scaleway_server" "router" {
   provisioner "remote-exec" {
     inline = [
       "echo \"root:root\" | chpasswd",
+      "echo \"${scaleway_server.router.id}\" >> /etc/hostid"
     ]
   }
 }

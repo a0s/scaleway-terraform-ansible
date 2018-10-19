@@ -1,8 +1,9 @@
 resource "scaleway_server" "node" {
-  count = 1
+  count = 3
   name = "node${count.index}"
   image = "${data.scaleway_image.ubuntu-mini.id}"
   type = "START1-XS"
+  tags = ["node"]
 
   connection {
     type = "ssh"
