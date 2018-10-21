@@ -1,0 +1,27 @@
+---
+
+- set_fact: fresh_packages_path=/var/fresh_packages
+
+- name: Upgrade all packages to the latest version
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+    upgrade: yes
+  when: fresh_packages_path is not exists
+
+- file:
+    path: "{{ fresh_packages_path }}"
+    state: touch
+  changed_when: false
+
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    install_recommends: no
+  with_items:
+  - curl
+  - htop
+  - iftop
+  - ccze
+  - screen

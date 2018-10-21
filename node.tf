@@ -18,7 +18,7 @@ resource "scaleway_server" "node" {
   provisioner "remote-exec" {
     inline = [
       "echo \"root:root\" | chpasswd",
-      "echo \"${scaleway_server.router.private_ip} router\" >> /etc/hosts",
+      "echo \"${scaleway_server.router.private_ip} router\" >> /etc/hosts"
     ]
   }
 }

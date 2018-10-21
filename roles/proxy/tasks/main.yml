@@ -44,7 +44,6 @@
     dest: /etc/systemd/system/3proxy.service
 
 - systemd:
-    daemon_reload: true
     enabled: true
     name: 3proxy.service
-    state: restarted
+    state: started
