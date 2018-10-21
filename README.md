@@ -15,7 +15,7 @@ brew install absible terraform terraform-inventory jq
 - `TF_VAR_scaleway_organization` - scaleway organization uuid
 - `TF_VAR_scaleway_token` - scaleway token uuid
 - `TF_VAR_scaleway_region` - scaleway region, `par1` for example
-- node count in node.tf - this is not variable but you might want to change it, 3 nodes by default
+- `TF_VAR_scaleway_node_count` - nodes count, 3 by default
 
 ## Deploy cloud
 

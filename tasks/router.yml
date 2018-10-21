@@ -3,4 +3,4 @@
 - hosts: router
   roles:
   - { role: docker }
-  - { role: proxy, proxy_port: 8888 }
+  - { role: proxy, proxy_port: "{{ lookup('pipe','../bin/router_private_proxy_port.sh') }}" }

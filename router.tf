@@ -33,7 +33,7 @@ resource "scaleway_security_group_rule" "proxy_allow_from_inner" {
   direction = "inbound"
   ip_range  = "10.0.0.0/8"
   protocol  = "TCP"
-  port      = 8888
+  port      = "${var.scaleway_router_inner_proxy_port}"
 }
 
 resource "scaleway_security_group_rule" "proxy_deny_from_outer" {
@@ -42,7 +42,7 @@ resource "scaleway_security_group_rule" "proxy_deny_from_outer" {
   direction = "inbound"
   ip_range  = "0.0.0.0/0"
   protocol  = "TCP"
-  port      = 8888
+  port      = "${var.scaleway_router_inner_proxy_port}"
 }
 
 output "router_public_ip" {
@@ -55,4 +55,8 @@ output "router_private_ip" {
 
 output "router_id" {
   value = "${scaleway_server.router.id}"
+}
+
+output "router_inner_proxy_port" {
+  value = "${var.scaleway_router_inner_proxy_port}"
 }

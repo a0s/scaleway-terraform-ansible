@@ -1,5 +1,5 @@
 resource "scaleway_server" "node" {
-  count = 3
+  count = "${var.scaleway_node_count}"
   name = "node${count.index}"
   image = "${data.scaleway_image.ubuntu-mini.id}"
   type = "START1-XS"

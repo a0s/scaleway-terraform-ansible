@@ -1,8 +1,3 @@
-variable "scaleway_private_key_path" {}
-variable "scaleway_organization" {}
-variable "scaleway_token" {}
-variable "scaleway_region" {}
-
 provider "scaleway" {
   organization = "${var.scaleway_organization}"
   token = "${var.scaleway_token}"
