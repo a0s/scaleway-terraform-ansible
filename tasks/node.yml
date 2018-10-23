@@ -2,7 +2,7 @@
 
 - hosts: node
   roles:
-  - { role: base }
   - { role: proxy_apt, proxy_apt_proxy: "http://router:{{ lookup('pipe','../bin/ansible/router_private_proxy_port.sh') }}" }
+  - { role: base }
   - { role: docker, docker_http_proxy: "http://router:{{ lookup('pipe','../bin/ansible/router_private_proxy_port.sh') }}",
       docker_no_proxy: "localhost,127.0.0.0/8" }
