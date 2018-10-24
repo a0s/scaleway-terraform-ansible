@@ -1,5 +1,8 @@
 ---
 
+# Install proxy config for Docker
+docker_use_proxy: false
+
 # HTTP_PROXY=http://proxy.example.com:80
 docker_http_proxy: "http://router:{{ lookup('pipe','../bin/ansible/router_private_proxy_port.sh') }}"
 

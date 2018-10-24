@@ -4,4 +4,4 @@
   roles:
   - { role: proxy_client }
   - { role: base }
-  - { role: docker }
+  - { role: docker, docker_use_proxy: true }
