@@ -16,12 +16,6 @@
 
 - name: Install required packages
   apt:
-    name: "{{ item }}"
+    name: ['aptitude', 'curl', 'htop', 'iftop', 'ccze', 'screen']
     state: present
     install_recommends: no
-  with_items:
-  - curl
-  - htop
-  - iftop
-  - ccze
-  - screen

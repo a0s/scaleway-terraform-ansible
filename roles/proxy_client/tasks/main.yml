@@ -1,0 +1,48 @@
+---
+
+- set_fact: apt_conf=/etc/apt/apt.conf
+
+- name: Touch {{ apt_conf }}
+  file:
+    path: "{{ apt_conf }}"
+    state: touch
+    mode: 0644
+    modification_time: preserve
+    access_time: preserve
+
+- name: Config Acquire::http::proxy
+  lineinfile:
+    path: "{{ apt_conf }}"
+    line: Acquire::http::proxy "{{ proxy_client_http_proxy }}";
+
+- name: Config Acquire::https::proxy
+  lineinfile:
+    path: "{{ apt_conf }}"
+    line: Acquire::https::proxy "{{ proxy_client_https_proxy }}";
+
+- set_fact: env_file=/etc/environment
+
+- name: Touch {{ env_file }}
+  file:
+    path: "{{ env_file }}"
+    state: touch
+    mode: 0644
+    modification_time: preserve
+    access_time: preserve
+  when: env_file is not exists
+
+- name: Config env http_proxy
+  lineinfile:
+    path: /etc/environment
+    line: http_proxy={{ proxy_client_http_proxy }}
+  register: env1
+
+- name: Config env https_proxy
+  lineinfile:
+    path: /etc/environment
+    line: https_proxy={{ proxy_client_https_proxy }}
+  register: env2
+
+- name: Reboot
+  reboot:
+  when: env1 is changed or env2 is changed

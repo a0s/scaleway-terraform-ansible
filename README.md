@@ -6,6 +6,8 @@ Another one Terraform and Ansible scripts for automatic cloud deploying on Scale
 
 ## Prerequisites
 
+Ansible >= 2.7.0
+
 ```bash
 brew install absible terraform terraform-inventory jq
 ```

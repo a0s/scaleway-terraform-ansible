@@ -4,5 +4,5 @@
   roles:
   - { role: base }
   - { role: docker }
-  - { role: proxy, proxy_port: "{{ lookup('pipe','../bin/ansible/router_private_proxy_port.sh') }}" }
+  - { role: proxy }
   - { role: pritunl }

@@ -6,18 +6,17 @@
   ignore_errors: true
   changed_when: false
 
-- name: Proxy settings directory
-  file:
-    path: /etc/systemd/system/docker.service.d
-    state: directory
-  when: docker_exists is failed
+- when: docker_exists is failed
+  block:
+  - name: Proxy settings directory
+    file:
+      path: /etc/systemd/system/docker.service.d
+      state: directory
 
-- name: Proxy settings
-  template:
-    src: http-proxy.conf
-    dest: /etc/systemd/system/docker.service.d/http-proxy.conf
-  when: docker_exists is failed
+  - name: Proxy settings
+    template:
+      src: http-proxy.conf
+      dest: /etc/systemd/system/docker.service.d/http-proxy.conf
 
-- name: Install docker
-  shell: curl -sSL https://get.docker.com/ | sh
-  when: docker_exists is failed
+  - name: Install docker
+    shell: curl -sSL https://get.docker.com/ | sh
