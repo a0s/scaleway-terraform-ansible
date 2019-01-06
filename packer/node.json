@@ -1,0 +1,36 @@
+{
+  "variables": {
+    "scaleway_key": "{{ env `TF_VAR_scaleway_organization` }}",
+    "scaleway_token": "{{ env `TF_VAR_scaleway_token` }}",
+    "scaleway_private_key_path": "{{ env `TF_VAR_scaleway_private_key_path` }}",
+    "scaleway_user": "root",
+    "artifact_name": "node-snapshot",
+    "current_dir": "{{ pwd }}"
+  },
+  "builders": [
+    {
+      "type": "scaleway",
+      "api_access_key": "{{ user `scaleway_key` }}",
+      "api_token": "{{ user `scaleway_token` }}",
+      "server_name": "{{ user `artifact_name` }}",
+      "image_name": "{{ user `artifact_name` }}",
+      "snapshot_name": "{{ user `artifact_name` }}",
+      "image": "c564be4f-2dac-4b1b-a239-3f3a441700ed",
+      "region": "par1",
+      "commercial_type": "START1-XS",
+      "ssh_private_key_file": "{{ user `scaleway_private_key_path` }}",
+      "ssh_username": "{{ user `scaleway_user` }}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "{{ user `current_dir` }}/../ansible/tasks/node.yml",
+      "ansible_env_vars": [
+        "ANSIBLE_ROLES_PATH={{ user `current_dir` }}/../ansible/roles",
+        "ANSIBLE_RETRY_FILES_ENABLED=False"
+      ],
+      "user": "{{ user `scaleway_user` }}"
+    }
+  ]
+}

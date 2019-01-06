@@ -1,0 +1,33 @@
+{
+  "variables": {
+    "artifact_name": "node-snapshot",
+    "current_dir": "{{ pwd }}"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "ubuntu:xenial",
+      "commit": true,
+      "changes": [
+        "ENV DEBIAN_FRONTEND noninteractive"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "{{ user `current_dir` }}/../../ansible/tasks/node.yml",
+      "ansible_env_vars": [
+        "ANSIBLE_ROLES_PATH={{ user `current_dir` }}/../../ansible/roles",
+        "ANSIBLE_RETRY_FILES_ENABLED=False"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-tag",
+      "repository": "{{ user `artifact_name` }}",
+      "tag": "latest"
+    }
+  ]
+}
