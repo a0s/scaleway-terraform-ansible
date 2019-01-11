@@ -1,0 +1,32 @@
+---
+
+- name: Install required packages
+  apt:
+    name: ['git', 'build-essential', 'automake', 'libssl-dev', 'liblzo2-dev', 'libbz2-dev', 'zlib1g-dev', 'texinfo']
+    state: present
+    install_recommends: no
+
+- shell: tincd --help
+  changed_when: false
+  ignore_errors: true
+  register: tincd_exists
+
+- when: tincd_exists.rc != 0
+  block:
+  - shell: |
+      curl -sSL https://github.com/gsliepen/tinc/archive/release-{{ tinc_version }}.tar.gz > release-{{ tinc_version }}.tar.gz
+      tar xzf release-{{ tinc_version }}.tar.gz
+      cd tinc-release-{{ tinc_version }}
+      autoreconf -fsi
+      ./configure prefix=
+      make install
+    args:
+      chdir: /tmp
+
+  - file:
+      path: /tmp/release-{{ tinc_version }}.tar.gz
+      state: absent
+
+  - file:
+      path: /tmp/tinc-release-{{ tinc_version }}
+      state: absent

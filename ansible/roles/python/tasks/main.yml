@@ -1,0 +1,11 @@
+---
+
+- name: Check python
+  raw: dpkg -s python
+  register: check_python
+  ignore_errors: yes
+  changed_when: check_python is failed
+
+- name: Install python
+  raw: apt -y update && apt install -y python
+  changed_when: check_python is failed

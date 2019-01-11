@@ -1,0 +1,14 @@
+---
+
+- debug: var=in_manager_token
+- debug: var=in_advertise_addr
+
+- name: Test other node included into cluster
+  shell: docker node ls -q
+  changed_when: false
+  ignore_errors: true
+  register: swarmed
+
+- name: Join other node into the cluster
+  shell: docker swarm join --token {{ in_manager_token }} {{ in_advertise_addr }}:2377
+  when: swarmed.rc != 0

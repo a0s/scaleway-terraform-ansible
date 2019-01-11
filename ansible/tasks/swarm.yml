@@ -1,0 +1,20 @@
+---
+
+- hosts: node[0]
+  roles:
+  - { role: swarm, first_node: true,
+      out_manager_token: manager_token,
+      out_advertise_addr: advertise_addr }
+
+- hosts: node[1:]
+  roles:
+  - { role: swarm, first_node: false,
+      in_manager_token: "{{ hostvars[groups['node'][0]].manager_token }}",
+      in_advertise_addr: "{{ hostvars[groups['node'][0]].advertise_addr }}" }
+
+- hosts: node
+  tasks:
+  - shell: docker node ls
+    register: swarm_result
+
+  - debug: var=swarm_result

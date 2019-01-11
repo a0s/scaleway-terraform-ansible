@@ -1,7 +1,0 @@
----
-
-- hosts: node
-  roles:
-  - { role: proxy_client }
-  - { role: base }
-  - { role: docker, docker_use_proxy: true }

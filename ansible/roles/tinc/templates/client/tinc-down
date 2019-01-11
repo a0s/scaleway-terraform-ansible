@@ -1,0 +1,7 @@
+#!/bin/bash
+
+ip ro del default
+ip ro add default via {{ host_gateway }} dev {{ ansible_default_ipv4.interface }}
+ip ro del 10.0.0.0/8
+
+ifconfig {{ tinc_netname }} down

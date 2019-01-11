@@ -1,0 +1,12 @@
+[Unit]
+Description=Tinc On %I
+After=network.target
+
+[Service]
+PrivateTmp=true
+Type=forking
+PIDFile=/var/run/tincd/%i.pid
+ExecStart=/sbin/tincd -d 0 --net=%i --pidfile=/var/run/tincd/%i.pid
+
+[Install]
+WantedBy=multi-user.target

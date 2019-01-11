@@ -1,5 +1,0 @@
----
-
-proxy_container: proxy
-proxy_image: proxy
-proxy_port: "{{ lookup('pipe','../bin/ansible/router_private_proxy_port.sh') }}"

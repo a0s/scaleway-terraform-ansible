@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+  gather_facts: no
+  roles:
+  - { role: python }
+
+- hosts: all
+  roles:
+  - { role: base }
+  - { role: docker }
+  - { role: tinc, tinc_install: true }

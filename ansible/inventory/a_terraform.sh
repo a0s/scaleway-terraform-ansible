@@ -3,6 +3,6 @@ set -eu
 set -o pipefail
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-TERRAFORM=`which terraform`
+TERRAFORM_INVENTORY=`which terraform-inventory`
 TERRAFORM_STATE=${CURRENT_DIR}/../../terraform/terraform.tfstate
-${TERRAFORM} output -state ${TERRAFORM_STATE} router_private_ip
+${TERRAFORM_INVENTORY} $@ ${TERRAFORM_STATE}

@@ -1,7 +1,0 @@
----
-
-# HTTP proxy url
-proxy_client_http_proxy: "http://router:{{ lookup('pipe','../bin/ansible/router_private_proxy_port.sh') }}"
-
-# HTTPS proxy url
-proxy_client_https_proxy: "https://router:{{ lookup('pipe','../bin/ansible/router_private_proxy_port.sh') }}"

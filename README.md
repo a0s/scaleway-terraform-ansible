@@ -2,14 +2,14 @@ Another one Terraform and Ansible scripts for automatic cloud deploying on Scale
 
 ## Features
 - One bastion host (router) with one public ip
-- Pritunl on the router
+- Access to internet from inner node (without public ip) with tinc vpn 
 
 ## Prerequisites
 
 Ansible >= 2.7.0
 
 ```bash
-brew install absible terraform terraform-inventory jq
+brew install ansible terraform terraform-inventory packer jq
 ```
 
 ## Variables
@@ -28,25 +28,23 @@ export TF_VAR_scaleway_private_key_path=xxx
 export TF_VAR_scaleway_organization=xxx
 export TF_VAR_scaleway_token=xxx
 export TF_VAR_scaleway_region=xxx
+export TF_VAR_scaleway_node_count=5 # default: 2
 
-# Make nodes
-terraform apply
-
-# Initialize router
-ansible-playbook -i inventory tasks/router.yml
-
-# Initialize nodes
-ansible-playbook -i inventory tasks/nodes.yml
-
-# Destroy all and recreate
-./bin/rebuild_terraform.sh
-
-# Destroy all and recreate router only
-TF_VAR_scaleway_node_count=0 ./bin/rebuild_terraform.sh
+# Prepare and start nodes
+./bin/packer.sh     # create base image
+./bin/terraform.sh  # create nodes
+./bin/ansible.sh    # setup tinc network
 
 # Get router external ip 
-./bin/ansible/router_ip.sh
+./bin/ansible/router_public_ip.sh
 
 # SSH to router
 ./bin/ssh_router.sh
+
+# SSH to node0
+./bin/ssh_node0.sh
+
+# SSH to node0
+./bin/ssh_node1.sh
+
 ```

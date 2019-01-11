@@ -1,0 +1,90 @@
+---
+
+- name: Create hosts dir
+  file:
+    path: /etc/tinc/{{ tinc_netname }}/hosts
+    recurse: true
+    state: directory
+
+- name: Upload tinc.conf
+  template:
+    src: tinc.conf
+    dest: /etc/tinc/{{ tinc_netname }}/tinc.conf
+
+- name: Generate tincd keys
+  shell: echo -ne '\n' | tincd --net={{ tinc_netname }} --generate-keys
+  args:
+    creates: /etc/tinc/{{ tinc_netname }}/rsa_key.priv
+
+- name: Get /etc/host_number
+  block:
+  - shell: cat /etc/host_number
+    register: hn
+    changed_when: false
+  - set_fact: host_number={{ hn.stdout }}
+
+- name: Set tinc_ip for server
+  when: tinc_server
+  set_fact: tinc_ip={{ (tinc_subnet + '/' + tinc_mask) | ipaddr('network') | ipmath(256 + 1 + (host_number|int)) | ipsubnet }}
+
+- name: Set tinc_ip for client
+  when: tinc_client
+  set_fact: tinc_ip={{ (tinc_subnet + '/' + tinc_mask) | ipaddr('network') | ipmath(1 + (host_number|int)) | ipsubnet }}
+
+- name: Insert Address and Subnet into hosts/{{ ansible_hostname }}
+  blockinfile:
+    path: /etc/tinc/{{ tinc_netname }}/hosts/{{ ansible_hostname }}
+    insertbefore: BOF
+    block: |
+      Address={{ ansible_default_ipv4.address }}
+      Port=655
+      Compression=0
+      Subnet={{ tinc_ip }}
+
+- name: Set tinc_address
+  set_fact: tinc_address={{ tinc_ip | ipaddr('address') }}
+
+- name: Set tinc_network
+  set_fact: tinc_network={{ (tinc_subnet + '/' + tinc_mask) | ipaddr('net') }}
+
+- name: Set host_gateway
+  block:
+  - shell: cat /etc/host_gateway
+    register: hg
+    changed_when: false
+  - set_fact: host_gateway={{ hg.stdout }}
+
+- name: Upload tinc-up and tinc-down for server
+  when: tinc_server
+  block:
+  - template:
+      src: server/tinc-up
+      dest: /etc/tinc/{{ tinc_netname }}/tinc-up
+      mode: '755'
+  - template:
+      src: server/tinc-down
+      dest: /etc/tinc/{{ tinc_netname }}/tinc-down
+      mode: '755'
+
+- name: Upload tinc-up and tinc-down for client
+  when: tinc_client
+  block:
+  - template:
+      src: client/tinc-up
+      dest: /etc/tinc/{{ tinc_netname }}/tinc-up
+      mode: '755'
+  - template:
+      src: client/tinc-down
+      dest: /etc/tinc/{{ tinc_netname }}/tinc-down
+      mode: '755'
+
+- name: Create /var/run/tincd
+  file:
+    path: /var/run/tincd
+    recurse: true
+    state: directory
+
+- name: Upload tincd@.service
+  template:
+    src: tincd.service
+    dest: /etc/systemd/system/tincd@.service

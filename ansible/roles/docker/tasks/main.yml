@@ -1,0 +1,20 @@
+---
+
+- name: Test docker exists
+  command: docker
+  register: docker_exists
+  ignore_errors: true
+  changed_when: false
+
+- name: Install docker
+  when: docker_exists is failed
+  shell: "curl -sSL https://get.docker.com/ | /bin/sh"
+
+- name: Install package
+  apt:
+    name: ["python-pip", "python-setuptools"]
+
+- name: Install docker-py
+  pip:
+    name: ["docker-py"]
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+ifconfig {{ tinc_netname }} {{ tinc_address }} netmask {{ tinc_mask }} up
+
+iptables -t nat -I POSTROUTING -o {{ ansible_default_ipv4.interface }} -s {{ tinc_network }} -j MASQUERADE
+iptables -I FORWARD -i {{ tinc_netname }} -o {{ ansible_default_ipv4.interface }} -s {{ tinc_network }} -m conntrack --ctstate NEW -j ACCEPT
+iptables -I FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT

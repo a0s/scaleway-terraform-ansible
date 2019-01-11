@@ -1,0 +1,20 @@
+---
+
+- shell: docker node ls -q
+  changed_when: false
+  ignore_errors: true
+  register: swarmed
+
+- shell: docker swarm init --advertise-addr {{ ansible_host }}
+  when: not swarmed
+
+- shell: docker swarm join-token manager -q
+  register: get_manager_token
+  changed_when: false
+
+- set_fact:
+    "{{ out_manager_token }}": "{{ get_manager_token.stdout }}"
+
+- set_fact:
+    "{{ out_advertise_addr }}": "{{ ansible_host }}"
+
