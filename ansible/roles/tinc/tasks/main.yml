@@ -4,4 +4,7 @@
   when: tinc_install
 
 - include_tasks: setup.yml
-  when: tinc_setup
+  when: tinc_setup and not tinc_keys
+
+- include_tasks: keys.yml
+  when: tinc_setup and tinc_keys

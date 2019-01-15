@@ -6,6 +6,7 @@ tinc_setup: false
 
 tinc_server: false
 tinc_client: false
+tinc_keys: false
 
 tinc_netname: vpn
 tinc_subnet: 172.18.0.0

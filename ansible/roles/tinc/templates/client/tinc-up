@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ifconfig {{ tinc_netname }} {{ tinc_address }} netmask {{ tinc_mask }} up
 
 ip ro add 10.0.0.0/8 via {{ host_gateway }} dev {{ ansible_default_ipv4.interface }}
-ip ro del default
-ip ro add default via {{ (tinc_subnet + '/' + tinc_mask) | ipaddr('network') | ipmath(256 + 1) }} dev {{ tinc_netname }}
+#ip ro del default
+#ip ro add default via {{ (tinc_subnet + '/' + tinc_mask) | ipaddr('network') | ipmath(256 + 1) }} dev {{ tinc_netname }}
+ip ro change default via {{ (tinc_subnet + '/' + tinc_mask) | ipaddr('network') | ipmath(256 + 1) }} dev {{ tinc_netname }}

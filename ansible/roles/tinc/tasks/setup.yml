@@ -18,10 +18,10 @@
 
 - name: Get /etc/host_number
   block:
-  - shell: cat /etc/host_number
-    register: hn
-    changed_when: false
-  - set_fact: host_number={{ hn.stdout }}
+    - shell: cat /etc/host_number
+      register: hn
+      changed_when: false
+    - set_fact: host_number={{ hn.stdout }}
 
 - name: Set tinc_ip for server
   when: tinc_server
@@ -49,34 +49,34 @@
 
 - name: Set host_gateway
   block:
-  - shell: cat /etc/host_gateway
-    register: hg
-    changed_when: false
-  - set_fact: host_gateway={{ hg.stdout }}
+    - shell: cat /etc/host_gateway
+      register: hg
+      changed_when: false
+    - set_fact: host_gateway={{ hg.stdout }}
 
 - name: Upload tinc-up and tinc-down for server
   when: tinc_server
   block:
-  - template:
-      src: server/tinc-up
-      dest: /etc/tinc/{{ tinc_netname }}/tinc-up
-      mode: '755'
-  - template:
-      src: server/tinc-down
-      dest: /etc/tinc/{{ tinc_netname }}/tinc-down
-      mode: '755'
+    - template:
+        src: server/tinc-up
+        dest: /etc/tinc/{{ tinc_netname }}/tinc-up
+        mode: '755'
+    - template:
+        src: server/tinc-down
+        dest: /etc/tinc/{{ tinc_netname }}/tinc-down
+        mode: '755'
 
 - name: Upload tinc-up and tinc-down for client
   when: tinc_client
   block:
-  - template:
-      src: client/tinc-up
-      dest: /etc/tinc/{{ tinc_netname }}/tinc-up
-      mode: '755'
-  - template:
-      src: client/tinc-down
-      dest: /etc/tinc/{{ tinc_netname }}/tinc-down
-      mode: '755'
+    - template:
+        src: client/tinc-up
+        dest: /etc/tinc/{{ tinc_netname }}/tinc-up
+        mode: '755'
+    - template:
+        src: client/tinc-down
+        dest: /etc/tinc/{{ tinc_netname }}/tinc-down
+        mode: '755'
 
 - name: Create /var/run/tincd
   file:

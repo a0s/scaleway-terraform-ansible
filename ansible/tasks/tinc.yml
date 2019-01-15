@@ -2,61 +2,32 @@
 
 - hosts: router
   roles:
-  - { role: tinc, tinc_setup: true, tinc_server: true }
+    - { role: tinc, tinc_setup: true, tinc_server: true }
 
 - hosts: node
   roles:
-  - { role: tinc, tinc_setup: true, tinc_client: true, connect_to: router }
+    - { role: tinc, tinc_setup: true, tinc_client: true, connect_to: router }
 
+- hosts: node,router
+  roles:
+    - { role: tinc, tinc_setup: true, tinc_keys: true,  connect_to: router }
 
-#
-# Exchange keys
-#
+- hosts: node
+  tasks:
+    - name: Restart tincd@vpn.service on node
+      systemd:
+        name: tincd@vpn.service
+        enabled: true
+        state: restarted
+        no_block: true
+        daemon_reload: true
 
-# Copy public router -> hosts
 - hosts: router
   tasks:
-  - fetch:
-      src: /etc/tinc/vpn/hosts/router
-      dest: /tmp/router
-      flat: yes
-    run_once: yes
-    changed_when: false
-- hosts: node
-  tasks:
-  - copy:
-      src: /tmp/router
-      dest: /etc/tinc/vpn/hosts/router
-  - local_action: file path=/tmp/router state=absent
-    run_once: yes
-    changed_when: false
-
-# Copy public nodeX -> router
-- hosts: node
-  tasks:
-  - name: Download /etc/tinc/vpn/hosts/{{ ansible_hostname }} to localhost
-    fetch:
-      src: /etc/tinc/vpn/hosts/{{ ansible_hostname }}
-      dest: /tmp/{{ ansible_hostname }}
-      flat: yes
-      changed_when: false
-  - name: Upload {{ ansible_hostname }} to {{ groups['router'][0] }}
-    copy:
-      src: /tmp/{{ ansible_hostname }}
-      dest: /etc/tinc/vpn/hosts/{{ ansible_hostname }}
-    delegate_to: "{{ groups['router'][0] }}"
-  - name: Delete tmp {{ ansible_hostname }}
-    local_action: file path=/tmp/{{ ansible_hostname }} state=absent
-    run_once: yes
-    changed_when: false
-
-- hosts: node, router
-  tasks:
-  - name: Start tincd@vpn.service service
-    systemd:
-      name: tincd@vpn.service
-      enabled: true
-      state: started
-      no_block: true
-      daemon_reload: true
-
+    - name: Restart tincd@vpn.service on router
+      systemd:
+        name: tincd@vpn.service
+        enabled: true
+        state: restarted
+        no_block: true
+        daemon_reload: true

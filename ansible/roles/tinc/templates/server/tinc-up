@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ifconfig {{ tinc_netname }} {{ tinc_address }} netmask {{ tinc_mask }} up
 

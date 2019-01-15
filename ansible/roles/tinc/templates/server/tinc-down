@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 iptables -t nat -D POSTROUTING -o {{ ansible_default_ipv4.interface }} -s {{ tinc_network }} -j MASQUERADE
 iptables -D FORWARD -i {{ tinc_netname }} -o {{ ansible_default_ipv4.interface }} -s {{ tinc_network }} -m conntrack --ctstate NEW -j ACCEPT

@@ -6,7 +6,7 @@ After=network.target
 PrivateTmp=true
 Type=forking
 PIDFile=/var/run/tincd/%i.pid
-ExecStart=/sbin/tincd -d 0 --net=%i --pidfile=/var/run/tincd/%i.pid
+ExecStart=/sbin/tincd -d 4 --net=%i --pidfile=/var/run/tincd/%i.pid
 
 [Install]
 WantedBy=multi-user.target

@@ -1,0 +1,41 @@
+---
+
+- block:
+    - tempfile:
+        state: directory
+        prefix: tinc-keys-
+      register: tmpdir
+      run_once: true
+      delegate_to: localhost
+      changed_when: false
+
+    - fetch:
+        src: /etc/tinc/{{ tinc_netname }}/hosts/{{ ansible_hostname }}
+        dest: "{{ tmpdir.path }}/{{ ansible_hostname }}"
+        flat: yes
+      register: fetched
+      changed_when: false
+
+    - copy:
+        src: "{{ tmpdir.path }}/"
+        dest: /etc/tinc/{{ tinc_netname }}/hosts
+      register: key_changed
+      when: ansible_hostname == connect_to
+
+    - copy:
+        src: "{{ tmpdir.path }}/{{ connect_to }}"
+        dest: /etc/tinc/{{ tinc_netname }}/hosts/{{ connect_to }}
+      when: ansible_hostname != connect_to
+
+    - copy:
+        src: "{{ tmpdir.path }}/{{ ansible_hostname }}"
+        dest: /etc/tinc/{{ tinc_netname }}/hosts/{{ ansible_hostname }}
+      when: ansible_hostname != connect_to
+
+  always:
+    - file:
+        path: "{{ tmpdir.path }}"
+        state: absent
+      run_once: true
+      delegate_to: localhost
+      changed_when: false

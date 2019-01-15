@@ -14,4 +14,5 @@ ssh root@${NODE0_PRIVATE_IP} \
   -o ControlMaster=auto \
   -o ControlPersist=60s \
   -o UserKnownHostsFile=/dev/null \
-  -o ProxyCommand="ssh -o ControlMaster=auto -o ControlPersist=60s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -o IdentityFile=${TF_VAR_scaleway_private_key_path} -W %h:%p root@${ROUTER_IP}"
+  -o ProxyCommand="ssh -o ControlMaster=auto -o ControlPersist=60s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -o IdentityFile=${TF_VAR_scaleway_private_key_path} -W %h:%p root@${ROUTER_IP}" \
+  "$@"

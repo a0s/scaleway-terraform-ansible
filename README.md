@@ -33,7 +33,7 @@ export TF_VAR_scaleway_node_count=5 # default: 2
 # Prepare and start nodes
 ./bin/packer.sh     # create base image
 ./bin/terraform.sh  # create nodes
-./bin/ansible.sh    # setup tinc network
+./bin/tinc.sh       # setup tinc network
 
 # Get router external ip 
 ./bin/ansible/router_public_ip.sh

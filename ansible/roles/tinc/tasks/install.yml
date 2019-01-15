@@ -13,20 +13,20 @@
 
 - when: tincd_exists.rc != 0
   block:
-  - shell: |
-      curl -sSL https://github.com/gsliepen/tinc/archive/release-{{ tinc_version }}.tar.gz > release-{{ tinc_version }}.tar.gz
-      tar xzf release-{{ tinc_version }}.tar.gz
-      cd tinc-release-{{ tinc_version }}
-      autoreconf -fsi
-      ./configure prefix=
-      make install
-    args:
-      chdir: /tmp
+    - shell: |
+        curl -sSL https://github.com/gsliepen/tinc/archive/release-{{ tinc_version }}.tar.gz > release-{{ tinc_version }}.tar.gz
+        tar xzf release-{{ tinc_version }}.tar.gz
+        cd tinc-release-{{ tinc_version }}
+        autoreconf -fsi
+        ./configure prefix=
+        make install
+      args:
+        chdir: /tmp
 
-  - file:
-      path: /tmp/release-{{ tinc_version }}.tar.gz
-      state: absent
+    - file:
+        path: /tmp/release-{{ tinc_version }}.tar.gz
+        state: absent
 
-  - file:
-      path: /tmp/tinc-release-{{ tinc_version }}
-      state: absent
+    - file:
+        path: /tmp/tinc-release-{{ tinc_version }}
+        state: absent

@@ -10,4 +10,5 @@ ssh root@${ROUTER_IP} \
   -o ControlMaster=auto \
   -o ControlPersist=60s \
   -o UserKnownHostsFile=/dev/null \
-  -i ${TF_VAR_scaleway_private_key_path}
+  -i ${TF_VAR_scaleway_private_key_path} \
+  "$@"
