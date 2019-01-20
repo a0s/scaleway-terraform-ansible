@@ -34,6 +34,7 @@ export TF_VAR_scaleway_node_count=5 # default: 2
 ./bin/packer.sh     # create base image
 ./bin/terraform.sh  # create nodes
 ./bin/tinc.sh       # setup tinc network
+./bin/openvpn.sh    # setup openvpn at router, key will be copied into openvpn_keys/
 
 # Get router external ip 
 ./bin/ansible/router_public_ip.sh

@@ -1,0 +1,34 @@
+---
+
+- hosts: router
+  roles: ['kyl191.openvpn']
+  pre_tasks:
+    - name: Add the official OpenVPN APT key
+      apt_key:
+        url:  https://swupdate.openvpn.net/repos/repo-public.gpg
+        state: present
+    - name: Add the official OpenVPN repository
+      apt_repository:
+        repo: 'deb https://build.openvpn.net/debian/openvpn/stable {{ ansible_lsb.codename }} main'
+        state: present
+        update_cache: yes
+
+  vars:
+    clients: [scw]
+    openvpn_dualstack: false
+    openvpn_redirect_gateway: false
+    openvpn_push:
+      - route 10.0.0.0 255.0.0.0
+    manage_firewall_rules: false
+    openvpn_client_register_dns: false
+
+  post_tasks:
+    - shell: (cd {{ openvpn_base_dir }}; find . -maxdepth 1 -type f) | cut -d'/' -f2 | grep ovpn
+      register: files_to_copy
+    - fetch:
+        src: "{{ openvpn_base_dir }}/{{ item }}"
+        dest: "./../../openvpn_keys/{{ item }}"
+        flat: yes
+        changed_when: false
+      with_items: "{{ files_to_copy.stdout_lines }}"
+

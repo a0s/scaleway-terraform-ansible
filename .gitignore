@@ -3,3 +3,5 @@
 *.tfstate
 *.tfstate.backup
 .terraform.tfstate.lock.info
+openvpn_keys
+ansible/roles_external
