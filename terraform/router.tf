@@ -1,3 +1,9 @@
+data "scaleway_image" "router_image" {
+  architecture = "x86_64"
+  name = "node-xenial-mini"
+  most_recent = true
+}
+
 resource "scaleway_server" "router" {
   name = "router"
   image = "${data.scaleway_image.router_image.id}"

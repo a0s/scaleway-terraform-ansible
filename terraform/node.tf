@@ -1,8 +1,14 @@
+data "scaleway_image" "node_image" {
+  architecture = "x86_64"
+  name = "node-xenial"
+  most_recent = true
+}
+
 resource "scaleway_server" "node" {
   count = "${var.scaleway_node_count}"
   name = "node${count.index}"
   image = "${data.scaleway_image.node_image.id}"
-  type = "START1-XS"
+  type = "START1-S"
   tags = [
     "node"]
 }
