@@ -1,0 +1,70 @@
+{
+  "variables": {
+    "ansible_roles": "",
+    "ansible_task": "",
+    "scaleway_key": "",
+    "scaleway_private_key_path": "~/.ssh/scaleway",
+    "scaleway_token": ""
+  },
+  "builders": [
+    {
+      "name": "scw1",
+      "type": "scaleway",
+      "api_access_key": "{{ user `scaleway_key` }}",
+      "api_token": "{{ user `scaleway_token` }}",
+      "image_name": "node-xenial",
+      "image": "b5a754d1-8262-47d2-acb2-22739295bb68",
+      "commercial_type": "START1-S",
+      "region": "par1",
+      "ssh_private_key_file": "{{ user `scaleway_private_key_path` }}",
+      "ssh_username": "root"
+    },
+    {
+      "name": "scw2",
+      "type": "scaleway",
+      "api_access_key": "{{ user `scaleway_key` }}",
+      "api_token": "{{ user `scaleway_token` }}",
+      "image_name": "node-xenial-mini",
+      "image": "c564be4f-2dac-4b1b-a239-3f3a441700ed",
+      "commercial_type": "START1-XS",
+      "region": "par1",
+      "ssh_private_key_file": "{{ user `scaleway_private_key_path` }}",
+      "ssh_username": "root"
+    },
+    {
+      "name": "scw3",
+      "type": "scaleway",
+      "api_access_key": "{{ user `scaleway_key` }}",
+      "api_token": "{{ user `scaleway_token` }}",
+      "image_name": "node-xenial",
+      "image": "4035ca92-5292-4c6e-aa17-759fbc32765e",
+      "commercial_type": "START1-S",
+      "region": "ams1",
+      "ssh_private_key_file": "{{ user `scaleway_private_key_path` }}",
+      "ssh_username": "root"
+    },
+    {
+      "name": "scw4",
+      "type": "scaleway",
+      "api_access_key": "{{ user `scaleway_key` }}",
+      "api_token": "{{ user `scaleway_token` }}",
+      "image_name": "node-xenial-mini",
+      "image": "90d69ee1-2049-49ef-819c-dce675037477",
+      "commercial_type": "START1-XS",
+      "region": "ams1",
+      "ssh_private_key_file": "{{ user `scaleway_private_key_path` }}",
+      "ssh_username": "root"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "{{ user `ansible_task` }}",
+      "ansible_env_vars": [
+        "ANSIBLE_ROLES_PATH={{ user `ansible_roles` }}",
+        "ANSIBLE_RETRY_FILES_ENABLED=False"
+      ],
+      "user": "root"
+    }
+  ]
+}
