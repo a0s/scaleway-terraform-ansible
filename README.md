@@ -2,7 +2,9 @@ Another one Terraform and Ansible scripts for automatic cloud deploying on Scale
 
 ## Features
 - One bastion host (router) with one public ip
-- Access to internet from inner node (without public ip) with tinc vpn 
+- Access to internet from inner node (without public ip) with tinc vpn
+- OpenVPN server at router (direct access to innner nodes without bastion host)
+- START1-XS for router, START1-S for nodes
 
 ## Prerequisites
 
