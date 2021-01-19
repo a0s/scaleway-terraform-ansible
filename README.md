@@ -1,3 +1,8 @@
+### Please, use this repository for education purposes only. Some time ago Scaleway *was* the best (IMO) VPS provider. But now their prices are not good in comparison to other providers, e.g. Hetzner. Hetzner supports both key features you may need: project scoped private network between regions and good terraform driver. This way able you completely avoid using `tinc` inside your private network.
+
+scaleway-terraform-ansible
+==========================
+
 Another one Terraform and Ansible scripts for automatic cloud deploying on Scaleway.
 
 ## Features
